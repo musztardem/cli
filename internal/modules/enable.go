@@ -21,7 +21,8 @@ func Enable(ctx context.Context, client kube.Client, module, channel string, def
 }
 
 func enable(writer io.Writer, ctx context.Context, client kube.Client, module, channel string, defaultCR bool, crs ...unstructured.Unstructured) clierror.Error {
-	if err := validateModuleAvailability(ctx, client, module); err != nil {
+	err := validateModuleAvailability(ctx, client, module)
+	if err != nil {
 		return clierror.Wrap(err, clierror.New("module invalid"))
 	}
 
@@ -31,7 +32,7 @@ func enable(writer io.Writer, ctx context.Context, client kube.Client, module, c
 	}
 
 	fmt.Fprintf(writer, "adding %s module to the Kyma CR\n", module)
-	err := client.Kyma().EnableModule(ctx, module, channel, crPolicy)
+	err = client.Kyma().EnableModule(ctx, module, channel, crPolicy)
 	if err != nil {
 		return clierror.Wrap(err, clierror.New("failed to enable module"))
 	}

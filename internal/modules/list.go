@@ -494,8 +494,8 @@ func getResourceState(ctx context.Context, client kube.Client, manager *kyma.Man
 	}
 
 	status := result.Object["status"].(map[string]interface{})
-	if state, ok := status["state"]; ok {
-		return state.(string), nil
+	if state, ok := status["state"].(string); ok {
+		return state, nil
 	}
 
 	if conditions, ok := status["conditions"]; ok {
